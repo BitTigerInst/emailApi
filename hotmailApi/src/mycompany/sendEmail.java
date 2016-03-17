@@ -32,11 +32,11 @@ public class sendEmail {
         }
     }
     
-    public void mail(String to, String subject, String message)
+    public boolean mail(String to, String subject, String message, emailPool pool)
     {
         
-        String from = "wukongproject@hotmail.com";
-        String login = "wukongproject@hotmail.com";
+        String from = pool.chooseEmail();
+        String login = pool.chooseEmail();
         String password = "Wukongteam";
         
         Properties props = new Properties();
@@ -63,11 +63,22 @@ public class sendEmail {
         }
         catch (MessagingException ex)
         {
-            System.out.printf("wrong");
+            return false;
         }
+        return true;
     }
     public static void main(String[] args){
         sendEmail test=new sendEmail();
-        test.mail("haotingliu1990@gmail.com", "test", "this is for test");
+        emailPool pool=new emailPool();
+        int tmp=pool.emailNum;
+        while(true){
+            /*            if(!test.mail("haotingliu1990@gmail.com", "test", "this is for test", pool))  {
+            if(pool.tryNext()) continue;
+            else break;
+            }*/
+            if(!test.mail("haotingliu1990@gmail.com", "test", "this is for test", pool)){
+                if(!pool.tryNext()) break;
+            }
+        }
     }
 }
